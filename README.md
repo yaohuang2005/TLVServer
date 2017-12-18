@@ -24,9 +24,11 @@ works as an input function to read and parse incoming byte stream from tcp level
 
 5. to handle long-lived connection, server periodically sends heartbeat back to alive client fd (for test, now in every 15 seconds), and also set cliend fd option as "SO_KEEPALIVE"
 
+
 ## To be improved:
 add a session layer by monitoring client fd, and creating a thread task to send heartbeat to client fd based on its inactivated duration
 
+add signal handle and parameter (option) handle in main()
 
 ## build and test step: (on Centos-6.4 x86-64 box)
 
