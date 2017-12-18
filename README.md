@@ -28,7 +28,7 @@ works as an input function to read and parse incoming byte stream from tcp level
 add a session layer by monitoring client fd, and creating a thread task to send heartbeat to client fd based on its inactivated duration
 
 
-## build step: (on Centos-6.4 x86-64 box)
+## build and test step: (on Centos-6.4 x86-64 box)
 
 ```
 In terminal:
@@ -41,7 +41,6 @@ LICENSE  Makefile  README.md  src/  test/  TLV_server
 $make
 
 ## test
-```
 test case 1: client send thread records of Hello, Data, Goodbye
 On server: 
 [140737337153280] [ThreadWorker] run task
