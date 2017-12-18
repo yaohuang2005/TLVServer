@@ -84,16 +84,31 @@ void TcpServer::sendHeartbeatToClient()
 	echo("[server] finish sending heartbeat to all clients\n");
 }
 
+void TcpServer::sendHeartbeatThreadWorker()
+{
+    struct itimerspec timer = {
+        .it_interval = {15, 0},  /* 15 second */
+        .it_value    = {15, 0},
+    };
+    uint64_t count;
+    int fd = timerfd_create(CLOCK_MONOTONIC, 0);
+    timerfd_settime(fd, 0, &timer, NULL);
+    for (;;) {
+        read(fd, &count, sizeof(count));
+        sendHeartbeatToClient();
+    }
+}
+
 void TcpServer::sendHeartbeatThreadKickstart() {
-	boost::thread heartbeatSenderThread(&TcpServer::sendHeartbeatToClient, this);
+	// only kick out one timer thread
+	boost::thread heartbeatSenderThread(&TcpServer::sendHeartbeatThreadWorker, this);
 	heartbeatSenderThread.detach();
 }
 
 void TcpServer::Run()
 {
     int optval = 1;
-    auto start = std::chrono::high_resolution_clock::now();
-
+    sendHeartbeatThreadKickstart();
     for(;;)
     {
         // waiting for epoll event
@@ -148,17 +163,6 @@ void TcpServer::Run()
                 sendingQueue.pop();
                 threadPool->enqueue(task);
             }
-        }
-
-        // TODO to be improved by using libevent timer to kickstart the heartbeat sender thread
-        auto finish = std::chrono::high_resolution_clock::now();
-        std::chrono::duration<double> elapsed = finish - start;
-        auto elapsed_seconds = std::chrono::duration_cast<std::chrono::seconds>(finish - start);
-        if (elapsed_seconds.count() > 15 ){
-            // every 15 seconds, send out heartbeat to all alive client
-        	sendHeartbeatThreadKickstart();
-            echo("[TcpServer] finish send heartbeat in a loop\n");
-            start = finish;
         }
     }
 }

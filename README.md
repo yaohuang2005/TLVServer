@@ -10,7 +10,7 @@ create thread pool and using epoll to accept clients connection.
          
     (1) main -> server_tcpsrv -> threadpool -> threadworker -> task_tcpreadmsg
     
-    (2)         server_tcpsrv -> heartbeatSenderThread 
+    (2)         server_tcpsrv -> heartbeatSenderThreadWorker 
                 (sends heart beat to all client fd to make long-lived connection alive)
                 
  Like a tcp/ip stack implementation, the task_tcpreadmsg readVariableRec() method

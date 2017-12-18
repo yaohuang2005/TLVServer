@@ -27,7 +27,8 @@
 #include <queue>
 #include <string>
 #include <unordered_set>
-#include <chrono>
+#include <inttypes.h>
+#include <sys/timerfd.h>
 
 #include "utility.h"
 #include "threadpool.h"
@@ -87,6 +88,7 @@ class TcpServer : public Server
         std::unordered_set<int> clientfds;
         boost::mutex clientfds_mutex;
         void sendHeartbeatThreadKickstart();
+        void sendHeartbeatThreadWorker();
 
     public:
         TcpServer(ThreadPool*);
