@@ -90,8 +90,6 @@ class TcpServer : public Server
         virtual ~TcpServer();
         void Connect(char *host, uint16_t port);
         void Run();
-        bool TriggerSend(int fd, char* data, int len);
-        void ContinueSend(int fd);
         void ContinueRecv(int fd);
         void eraseClosedClientfd(int fd);
 };

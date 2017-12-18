@@ -153,35 +153,6 @@ void TcpServer::Run()
     }
 }
 
-bool TcpServer::TriggerSend(int fd, char* msg, int len)
-{
-    try
-    {
-        TcpPkg *pkg = new TcpPkg();
-        pkg->fd = fd;
-        pkg->size = len;
-        pkg->msg = new string(msg);
-        pkg->srv = this;
-        sendingQueue.push(pkg);
-        // request will be handle in separate thread
-        ContinueSend(fd);
-    }
-    catch(...)
-    {
-        TRACE_FUNC_RET_D(0)
-        return false;
-    }
-    return true;
-}
-
-void TcpServer::ContinueSend(int fd)
-{
-    // Modify monitored event to EPOLLOUT, wait next loop to send data
-    ev.events = EPOLLOUT | EPOLLET;
-    // modify moditored fd event
-    epoll_ctl(epfd, EPOLL_CTL_MOD, fd, &ev);
-}
-
 void TcpServer::ContinueRecv(int fd)
 {
     // Modify monitored event to EPOLLIN, wait next loop to receive data
