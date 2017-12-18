@@ -39,9 +39,6 @@ void printHelp(int rc)
 
 void processArgs(int argc, char** argv)
 {
- //   int _port = 1234;
- //   int _number = 4;
-
     const char* const short_opts = "p:n:h";
     const option long_opts[] = {
             {"port",      0, nullptr, 'p'},  // optional

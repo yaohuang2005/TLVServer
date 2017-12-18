@@ -29,7 +29,6 @@ void ThreadWorker::operator()()
                 // if there are none wait for notification
                 pool->queue_cond.wait(lock);
             }
-            echo("[ThreadWorker] got a task\n");
 
             if(pool->stop) // exit if the pool is stopped
             {
@@ -43,7 +42,6 @@ void ThreadWorker::operator()()
         }   // release lock
 
         // execute the task
-        echo("[ThreadWorker] run task\n");
         task->run();
         delete task;
     }

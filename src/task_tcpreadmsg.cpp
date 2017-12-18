@@ -81,13 +81,12 @@ int TaskTcpReadMsg::readVariableRec(int fd, char *bp, size_t len)
         while (reclen > 0)
         {
             rc = readNBytes(fd, bp, len);
-            if ( rc != len )
+            if ( rc != (int)len )
                 return rc < 0 ? -1 : 0;
             reclen -= len;
             if (reclen < len)
                 len = reclen;
         }
-        //set_errno( EMSGSIZE );
         return -1;
     }
 
@@ -137,8 +136,6 @@ void TaskTcpReadMsg::run()
     int fd = rdata->fd;
     int size;
 
-    echo("[TaskTcpReadMsg] handling %d\n", fd);
-
     line[0] = '\0';
 
     if ((n = readVariableRec(fd, line, MAXBYTE)) < 0)
@@ -156,6 +153,7 @@ void TaskTcpReadMsg::run()
         if (rdata != NULL)
             delete rdata;
     }
+/*
     else
     {
         size = n;
@@ -168,5 +166,6 @@ void TaskTcpReadMsg::run()
             }
         }
     }
+*/
 }
 
