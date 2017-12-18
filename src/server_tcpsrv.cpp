@@ -66,7 +66,7 @@ void TcpServer::sendHeartbeatToClient()
 	long n = 0;
 	for ( auto fd : clientfds) {
 		if (fd != 0) {
-			if ((n = send(fd, "heartbeat", 9, 0)) < 0)
+			if ((n = send(fd, "heartbeat\n", 10, 0)) < 0)
 			{
 				if (errno == ECONNRESET)
 					close(fd);
@@ -105,7 +105,6 @@ void TcpServer::Run()
                     errexit("connfd < 0");
                 setnonblocking(connfd);
                 setsockopt(connfd, SOL_SOCKET, SO_KEEPALIVE, &optval, sizeof(optval));
-
 
                 ev.data.fd = connfd;
                 // monitor in message, edge trigger
