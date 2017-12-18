@@ -49,27 +49,29 @@ $make
 ## test
 test case 1: client send thread records of Hello, Data, Goodbye
 On server: 
-[140737337153280] [ThreadWorker] run task
-[140737337153280] [TaskTcpReadMsg] handling 7
-[127.0.0.1:1111] [Hello] [0] []
-[140737337153280] [ThreadWorker] waiting task
+...
+[140737337169696] [TcpServer] connect from 127.0.0.1 
 [140737337169696] [ThreadPool] enqueue a task
-[140737326663424] [ThreadWorker] got a task
-[140737326663424] [ThreadWorker] run task
-[140737326663424] [TaskTcpReadMsg] handling 7
-[127.0.0.1:1111] [Data] [5] [0x1 0x2 0x3 0x4]
-[127.0.0.1:1111] [Goodbye] [0] []
-[140737326663424] [ThreadWorker] waiting task
+[127.0.0.1:4444] [Hello] [0] []
+[140737316181760] [ThreadWorker] waiting task
+[140737337169696] [ThreadPool] enqueue a task
+[127.0.0.1:4444] [Data] [5] [0x1 0x2 0x3 0x4]
+[140737305691904] [ThreadWorker] waiting task
+[140737337169696] [ThreadPool] enqueue a task
+[140737337161472] [ThreadWorker] waiting task
+[140737337169696] [ThreadPool] enqueue a task
+[127.0.0.1:4444] [Goodbye] [0] []
+[140737326671616] [ThreadWorker] waiting task
 [140737337169696] [server] finish sending heartbeat to all clients
 [140737337169696] [TcpServer] finish send heartbeat in a loop
-[140737337169696] [server] finish sending heartbeat to all clients
-[140737337169696] [TcpServer] finish send heartbeat in a loop
+...
 
 On client:
-[root@localhost test]# nc -p 1111 localhost 1234 < helloDataGoodbye 
+[root@localhost test]# nc -p 4444 localhost 1234 < full
+server
 heartbeat
 heartbeat
-heartbeat
+
 
 We can see the client also received heartbeat in every 15 seconds.
 

@@ -3,7 +3,7 @@
  *  Copyright (C) 2017 yaohuang2005@gmail.com
  *
  *  Licensed under the GNU LESSER GENERAL PUBLIC LICENSE
-
+ *
  *  Unless required by applicable law or agreed to in writing, software
  *  distributed under the License is distributed on an "AS IS" BASIS,
  *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -17,18 +17,7 @@
 
 #define TASK_TYPE_TCP_READ_MSG 1
 
-#define MAXBYTE 1024
-
-/**
- * MsgHeader, totally has 6 bytes
- */
-struct MsgHeader
-{
-    // msg tyep
-    u_int16_t type;
-    // real message length
-    u_int32_t length;
-};
+#define MAXBTYE 1024
 
 class TaskTcpReadMsg : public Task
 {

@@ -2,7 +2,8 @@
  *  ===============
  *  Copyright (C) 2017 yaohuang2005@gmail.com
  *
- *  Licensed under the GNU LESSER GENERAL PUBLIC LICENSE;
+ *  Licensed under the GNU LESSER GENERAL PUBLIC LICENSE
+ *
  *  Unless required by applicable law or agreed to in writing, software
  *  distributed under the License is distributed on an "AS IS" BASIS,
  *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -11,6 +12,7 @@
  */
 #include "task_factory.h"
 #include "task_tcpreadmsg.h"
+#include "task_tcpwritemsg.h"
 #include "utility.h"
 
 TaskFactory* TaskFactory::m_ins = NULL;
@@ -40,6 +42,8 @@ Task* TaskFactory::CreateTask(int type, void *arg)
     {
         case TASK_TYPE_TCP_READ_MSG:
             return new TaskTcpReadMsg(arg);
+        case TASK_TYPE_TCP_WRITE_MSG:
+            return new TaskTcpWriteMsg(arg);
         default:
             return NULL;
     }

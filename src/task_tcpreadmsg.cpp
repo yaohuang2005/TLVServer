@@ -3,6 +3,7 @@
  *  Copyright (C) 2017 yaohuang2005@gmail.com
  *
  *  Licensed under the GNU LESSER GENERAL PUBLIC LICENSE
+ *
  *  Unless required by applicable law or agreed to in writing, software
  *  distributed under the License is distributed on an "AS IS" BASIS,
  *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -22,15 +23,14 @@
 
 TaskTcpReadMsg::TaskTcpReadMsg(void *arg) : Task(arg)
 {
-    line = new char(MAXBYTE + 1);
-    line[MAXBYTE] = '\0';
+    line = new char(MAXBTYE + 1);
+    line[MAXBTYE] = '\0';
 }
 
 TaskTcpReadMsg::~TaskTcpReadMsg()
 {
     delete line;
 }
-
 
 int TaskTcpReadMsg::readNBytes(int fd, char *bp, size_t len)
 {
@@ -128,7 +128,6 @@ int TaskTcpReadMsg::readVariableRec(int fd, char *bp, size_t len)
     return rc;
 }
 
-
 void TaskTcpReadMsg::run()
 {
     int n, i;
@@ -137,23 +136,19 @@ void TaskTcpReadMsg::run()
     int size;
 
     line[0] = '\0';
-
-    if ((n = readVariableRec(fd, line, MAXBYTE)) < 0)
+    if ((n = readVariableRec(fd, line, MAXBTYE)) < 0)
     {
         if (errno == ECONNRESET)
             close(fd);
-        echo("[TaskTcpReadMsg] Error: readline failed: [err %d] - %s\n", errno, strerror(errno));
         if (rdata != NULL)
             delete rdata;
     }
     else if (n == 0)
     {
         close(fd);
-        echo("[TaskTcpReadMsg] Error: client closed connection.\n");
         if (rdata != NULL)
             delete rdata;
     }
-/*
     else
     {
         size = n;
@@ -165,7 +160,11 @@ void TaskTcpReadMsg::run()
                 size = i + 1;
             }
         }
+        if (line[0] != '\0')
+        {
+            if (!rdata->srv->TriggerSend(fd, line, size))
+                echo("[TaskTcpReadMsg] Error: trigger send fail.\n");
+        }
     }
-*/
 }
 

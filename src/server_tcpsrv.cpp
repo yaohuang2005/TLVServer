@@ -34,8 +34,10 @@ void TcpServer::Connect(char *host, uint16_t port)
 {
     bzero(&serveraddr, sizeof(serveraddr));
     serveraddr.sin_family = AF_INET;
-    // under requirement, listen on all network interfaces
-    serveraddr.sin_addr.s_addr = INADDR_ANY;
+    if (host)
+        inet_aton(host, &(serveraddr.sin_addr));
+    else
+        serveraddr.sin_addr.s_addr = INADDR_ANY;
     serveraddr.sin_port = htons(port);
     bind(listenfd, (sockaddr*)&serveraddr, sizeof(serveraddr));
     listen(listenfd, LISTENQ);
@@ -86,6 +88,7 @@ void TcpServer::Run()
 {
     int optval = 1;
     auto start = std::chrono::high_resolution_clock::now();
+
     for(;;)
     {
         // waiting for epoll event
@@ -97,15 +100,13 @@ void TcpServer::Run()
             // Get new connection
             if (events[i].data.fd == listenfd)
             {
-            	// initialize clientaddr
-            	bzero(&clientaddr, sizeof(clientaddr));
                 // accept the client connection
                 connfd = accept(listenfd, (sockaddr*)&clientaddr, &clilen);
                 if (connfd < 0)
                     errexit("connfd < 0");
                 setnonblocking(connfd);
                 setsockopt(connfd, SOL_SOCKET, SO_KEEPALIVE, &optval, sizeof(optval));
-
+                echo("[TcpServer] connect from %s \n", inet_ntoa(clientaddr.sin_addr));
                 ev.data.fd = connfd;
                 // monitor in message, edge trigger
                 ev.events = EPOLLIN | EPOLLET;
@@ -118,14 +119,14 @@ void TcpServer::Run()
             {
                 if (events[i].data.fd < 0)
                     continue;
-
                 TcpPkg* pkg= new TcpPkg;
-                memset(pkg, 0, sizeof(TcpPkg));
                 pkg->fd = events[i].data.fd;
                 pkg->srv = this;
 
+
                 strcpy(pkg->src_ip, inet_ntoa(clientaddr.sin_addr));
                 pkg->src_port = (int)ntohs(clientaddr.sin_port);
+
 
                 Task *task = TaskFactory::Ins()->CreateTask(TASK_TYPE_TCP_READ_MSG, (void*)pkg);
                 threadPool->enqueue(task);
@@ -137,6 +138,10 @@ void TcpServer::Run()
                     continue;
                 if (sendingQueue.size() == 0)
                     continue;
+                Task *task = TaskFactory::Ins()->CreateTask(TASK_TYPE_TCP_WRITE_MSG, 
+                        (void*)sendingQueue.front());
+                sendingQueue.pop();
+                threadPool->enqueue(task);
             }
         }
 
@@ -153,12 +158,31 @@ void TcpServer::Run()
     }
 }
 
-void TcpServer::shutdown()
+bool TcpServer::TriggerSend(int fd, char* msg, int len)
 {
-	boost::mutex::scoped_lock lock(clientfds_mutex);
-	for ( auto fd : clientfds) {
-		close(fd);
-	}
+    try
+    {
+        TcpPkg *pkg = new TcpPkg();
+        pkg->fd = fd;
+        pkg->size = len;
+        pkg->msg = new string(msg);
+        pkg->srv = this;
+        sendingQueue.push(pkg);
+        ContinueSend(fd);
+    }
+    catch(...)
+    {
+        return false;
+    }
+    return true;
+}
+
+void TcpServer::ContinueSend(int fd)
+{
+    // Modify monitored event to EPOLLOUT, wait next loop to send data
+    ev.events = EPOLLOUT | EPOLLET;
+    // modify moditored fd event
+    epoll_ctl(epfd, EPOLL_CTL_MOD, fd, &ev);
 }
 
 void TcpServer::ContinueRecv(int fd)
@@ -168,4 +192,3 @@ void TcpServer::ContinueRecv(int fd)
     // modify moditored fd event
     epoll_ctl(epfd, EPOLL_CTL_MOD, fd, &ev);
 }
-

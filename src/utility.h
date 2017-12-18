@@ -2,14 +2,14 @@
  *  ===============
  *  Copyright (C) 2017 yaohuang2005@gmail.com
  *
- *  Licensed under the Apache License, Version 2.0 (the "License");
+ *  Licensed under the GNU LESSER GENERAL PUBLIC LICENSE
+ *
  *  Unless required by applicable law or agreed to in writing, software
  *  distributed under the License is distributed on an "AS IS" BASIS,
  *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  *  See the License for the specific language governing permissions and
  *  limitations under the License.
  */
-
 #ifndef _UTILITY_H_
 #define _UTILITY_H_
 
@@ -18,6 +18,7 @@
 
 #define RET_ERR -1
 #define RET_OK  0
+
 
 #define TRACE_FUNC_BEGIN
 #define TRACE_FUNC_LEAVE

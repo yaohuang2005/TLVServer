@@ -3,13 +3,13 @@
  *  Copyright (C) 2017 yaohuang2005@gmail.com
  *
  *  Licensed under the GNU LESSER GENERAL PUBLIC LICENSE
+ *
  *  Unless required by applicable law or agreed to in writing, software
  *  distributed under the License is distributed on an "AS IS" BASIS,
  *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  *  See the License for the specific language governing permissions and
  *  limitations under the License.
  */
-
 #ifndef _SERVER_TCP_SERVER_H_
 #define _SERVER_TCP_SERVER_H_
 
@@ -34,6 +34,7 @@
 #include "threadworker.h"
 #include "task_factory.h"
 #include "task_tcpreadmsg.h"
+#include "task_tcpwritemsg.h"
 #include "server.h"
 
 #define OPEN_MAX    100
@@ -81,6 +82,7 @@ class TcpServer : public Server
         socklen_t clilen;
         sockaddr_in clientaddr;
         sockaddr_in serveraddr;
+
         void sendHeartbeatToClient();
         std::unordered_set<int> clientfds;
         boost::mutex clientfds_mutex;
@@ -90,9 +92,11 @@ class TcpServer : public Server
         virtual ~TcpServer();
         void Connect(char *host, uint16_t port);
         void Run();
+        bool TriggerSend(int fd, char* data, int len);
+        void ContinueSend(int fd);
         void ContinueRecv(int fd);
+
         void eraseClosedClientfd(int fd);
-        void shutdown();
 };
 
 #endif

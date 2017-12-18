@@ -22,11 +22,12 @@
 #include "utility.h"
 
 #define LOCAL_ADDR  "127.0.0.1"
-
+#define SERV_PORT   1234
 // Global config
 int port = 1234;
 int number = 4;
-TcpServer *server;
+ThreadPool *threadPool;
+
 
 void printHelp(int rc)
 {
@@ -84,8 +85,7 @@ static void shutdown()
 {
     //clean up, join threads
     std::cout << "shutdown" << std::endl;
-    server->shutdown();
-    delete server;
+    delete threadPool;  // will shutdown all threads. and close client fd
 }
 
 static void signalHandler(int signal)
@@ -115,16 +115,15 @@ int main(int argc,char* argv[])
 {
     processArgs(argc, argv);
 
-    ThreadPool *threadPool = new ThreadPool(number);
+    threadPool = new ThreadPool(number);
 
-    server = new TcpServer(threadPool);
+    TcpServer server(threadPool);
     /* Signal handler */
     signalInit();
 
-    server->Connect(NULL, port);
-    server->Run();
+    server.Connect(NULL, port);
+    server.Run();
 
     return 0;
 }
-
 
