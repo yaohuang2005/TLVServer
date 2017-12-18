@@ -10,8 +10,8 @@ create thread pool and using epoll to accept clients connection.
          
     main -> server_tcpsrv -> threadpool -> threadworker -> task_tcpreadmsg
     
-            server_tcpsrv -> heartbeatThread (sends heart beat to all client fd)
-
+            server_tcpsrv -> heartbeatSenderThread (sends heart beat to all client fd)
+            (to make long-lived connection alive)
  like a tcp/ip stack implementation, the task_tcpreadmsg readVariableRec() method
 works as an input function to read and parse incoming byte stream from tcp level to get type, length, data of records
  
@@ -24,7 +24,8 @@ works as an input function to read and parse incoming byte stream from tcp level
 
 4. set the serveraddr.sin_addr.s_addr = INADDR_ANY to accept every interface connection
 
-5. to handle long-lived connection, server periodically sends heartbeat back to alive client fd (for test, now in every 15 seconds), and also set cliend fd option as "SO_KEEPALIVE"
+5. to handle long-lived connection, tcp server periodically sends heartbeat back to all 
+alive client fd (for test, now in every 15 seconds), and of course also set cliend fd option as "SO_KEEPALIVE"
 
 
 ## To be improved:
