@@ -120,7 +120,6 @@ int main(int argc,char* argv[])
 
     ThreadPool *threadPool = new ThreadPool(number);
 
-  //  TcpServer server(threadPool);
     server = new TcpServer(threadPool);
     /* Signal handler */
     signalInit();
