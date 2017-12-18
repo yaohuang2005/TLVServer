@@ -13,10 +13,9 @@ create thread pool and using epoll to accept clients connection.
 works as an input function to read and parse incoming byte stream from tcp level to get type, length, data of records
  
 2. Library dependency Linux:
-       libpthread
-       glibc++x86_64 (for getopt)
-       libboost-1.59.0 (for multithread)
-       epoll
+       glibc++x86_64,
+       libboost-1.59.0  (for thread pool) and libpthread (for thread),
+       epoll  (for socket fd events)
        
 3. Code in C++11
 
