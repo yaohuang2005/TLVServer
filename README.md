@@ -10,7 +10,7 @@ create thread pool and using epoll to accept clients connection.
  main -> server_tcpsrv -> threadpool -> threadworker -> task_tcpreadmsg 
 
  like a tcp/ip stack implementation, the task_tcpreadmsg readVariableRec() method
- to read and parse incoming byte stream to get type, length, data.
+works as an input function to read and parse incoming byte stream from tcp level to get type, length, data of records
  
 2. Library dependency Linux:
        libpthread
@@ -32,7 +32,6 @@ add a session layer by monitoring client fd, and creating a thread task to send 
 
 ```
 In terminal:
-
 $git clone git@github.com:yaohuang2005/TLVServer.git
 $cd TLVServer
 
@@ -42,6 +41,7 @@ LICENSE  Makefile  README.md  src/  test/  TLV_server
 $make
 
 ## test
+```
 test case 1: client send thread records of Hello, Data, Goodbye
 On server: 
 [140737337153280] [ThreadWorker] run task
