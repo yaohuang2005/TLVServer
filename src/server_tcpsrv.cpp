@@ -153,6 +153,14 @@ void TcpServer::Run()
     }
 }
 
+void TcpServer::shutdown()
+{
+	boost::mutex::scoped_lock lock(clientfds_mutex);
+	for ( auto fd : clientfds) {
+		close(fd);
+	}
+}
+
 void TcpServer::ContinueRecv(int fd)
 {
     // Modify monitored event to EPOLLIN, wait next loop to receive data

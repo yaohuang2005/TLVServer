@@ -92,6 +92,7 @@ class TcpServer : public Server
         void Run();
         void ContinueRecv(int fd);
         void eraseClosedClientfd(int fd);
+        void shutdown();
 };
 
 #endif
