@@ -2,7 +2,7 @@ GCC=g++ -std=c++11
 APP=TLV
 OUTFILE=$(APP)_server
 SRC = $(wildcard src/*.cpp)
-OBJS = $(SRC:%.cc=%.o)
+OBJS = $(SRC:%.cpp=%.o)
 
 BOOST_LIB_DIR=/usr/lib64
 #LIBEVENT2_LIB_DIR=/usr/local/lib
@@ -14,7 +14,7 @@ server: $(OBJS)
 		-lpthread -lboost_thread -levent -levent_core -levent_extra -lboost_system \
 		-ldl  -fPIC 
 
-%.o: %.cc
+%.o: %.cpp
 	$(GCC) -c -o $@ $< -Wall  -g 
 
 clean :
