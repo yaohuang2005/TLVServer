@@ -25,7 +25,10 @@ works as an input function to read and parse incoming byte stream from tcp level
 
 
 ## To be improved:
-add a session layer by monitoring client fd, and creating a thread task to send heartbeat to client fd based on its inactivated duration
+add a session level by monitoring client fd, inactivated duration, and creating a thread task to send heartbeat to client fd based on idle duration
+
+raplace Boost thread with c++11 concurrency
+repalce epool with libevent
 
 
 ## build and test step: (on Centos-6.4 x86-64 box)
