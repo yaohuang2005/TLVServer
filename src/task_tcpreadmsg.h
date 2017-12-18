@@ -3,6 +3,7 @@
  *  Copyright (C) 2017 yaohuang2005@gmail.com
  *
  *  Licensed under the GNU LESSER GENERAL PUBLIC LICENSE
+
  *  Unless required by applicable law or agreed to in writing, software
  *  distributed under the License is distributed on an "AS IS" BASIS,
  *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -33,8 +34,8 @@ class TaskTcpReadMsg : public Task
 {
     private:
         char *line;
-        int readn( int fd, char *bp, size_t len);
-        int readvrec( int fd, char *bp, size_t len );
+        int readNBytes( int fd, char *bp, size_t len);
+        int readVariableRec( int fd, char *bp, size_t len );
     public:
         TaskTcpReadMsg(void *arg);
         ~TaskTcpReadMsg();

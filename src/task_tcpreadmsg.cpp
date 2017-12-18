@@ -32,7 +32,7 @@ TaskTcpReadMsg::~TaskTcpReadMsg()
 }
 
 
-int TaskTcpReadMsg::readn(int fd, char *bp, size_t len)
+int TaskTcpReadMsg::readNBytes(int fd, char *bp, size_t len)
 {
     int cnt;
     int rc;
@@ -55,7 +55,7 @@ int TaskTcpReadMsg::readn(int fd, char *bp, size_t len)
     return len;
 }
 
-int TaskTcpReadMsg::readvrec(int fd, char *bp, size_t len)
+int TaskTcpReadMsg::readVariableRec(int fd, char *bp, size_t len)
 {
     u_int16_t rectype;
 	u_int32_t reclen;
@@ -63,13 +63,13 @@ int TaskTcpReadMsg::readvrec(int fd, char *bp, size_t len)
     int rc;
 
     // read header type
-    rc = readn(fd, (char *)&rectype, sizeof(u_int16_t));
+    rc = readNBytes(fd, (char *)&rectype, sizeof(u_int16_t));
     if (rc != sizeof(u_int16_t))
     	return rc < 0 ? -1 : 0;
     rectype = ntohs(rectype);
 
     // read header length
-    rc = readn(fd, (char *)&reclen, sizeof(u_int32_t));
+    rc = readNBytes(fd, (char *)&reclen, sizeof(u_int32_t));
     if (rc != sizeof(u_int32_t))
     	return rc < 0 ? -1 : 0;
     reclen = ntohl(reclen);
@@ -80,7 +80,7 @@ int TaskTcpReadMsg::readvrec(int fd, char *bp, size_t len)
     	// so read initial part of record data
         while (reclen > 0)
         {
-            rc = readn(fd, bp, len);
+            rc = readNBytes(fd, bp, len);
             if ( rc != len )
                 return rc < 0 ? -1 : 0;
             reclen -= len;
@@ -93,7 +93,7 @@ int TaskTcpReadMsg::readvrec(int fd, char *bp, size_t len)
 
     /* Retrieve the rest part of record data */
     if (reclen > 0) {
-    	rc = readn(fd, bp, reclen);
+    	rc = readNBytes(fd, bp, reclen);
     	if (rc != (int)reclen)
     		return rc < 0 ? -1 : 0;
     }
@@ -141,7 +141,7 @@ void TaskTcpReadMsg::run()
 
     line[0] = '\0';
 
-    if ((n = readvrec(fd, line, MAXBYTE)) < 0)
+    if ((n = readVariableRec(fd, line, MAXBYTE)) < 0)
     {
         if (errno == ECONNRESET)
             close(fd);
