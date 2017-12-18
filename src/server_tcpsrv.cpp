@@ -156,7 +156,6 @@ void TcpServer::Run()
         auto elapsed_seconds = std::chrono::duration_cast<std::chrono::seconds>(finish - start);
         if (elapsed_seconds.count() > 15 ){
             // every 15 seconds, send out heartbeat to all alive client
-        	//sendHeartbeatToClient();
         	sendHeartbeatThreadKickstart();
             echo("[TcpServer] finish send heartbeat in a loop\n");
             start = finish;
