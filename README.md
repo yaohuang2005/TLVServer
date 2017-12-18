@@ -7,8 +7,9 @@ The architecture of TLVServer is based on Boost thread library to
 create thread pool and using epoll to accept clients connection.
 
 1. The TLVServer diagram is:
- main -> server_tcpsrv -> threadpool -> threadworker -> task_tcpreadmsg 
-                       -> heartbeatThread (sends heart beat to all client fd)
+ main -> server_tcpsrv -> threadpool -> threadworker -> task_tcpreadmsg
+ 
+           server_tcpsrv -> heartbeatThread (sends heart beat to all client fd)
 
  like a tcp/ip stack implementation, the task_tcpreadmsg readVariableRec() method
 works as an input function to read and parse incoming byte stream from tcp level to get type, length, data of records
