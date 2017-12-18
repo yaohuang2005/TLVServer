@@ -8,9 +8,11 @@ create thread pool and using epoll to accept clients connection.
 
 1. The TLVServer diagram is:
          
-    main -> server_tcpsrv -> threadpool -> threadworker -> task_tcpreadmsg
-            server_tcpsrv -> heartbeatSenderThread (sends heart beat to all client fd)
-            (to make long-lived connection alive)
+    (1) main -> server_tcpsrv -> threadpool -> threadworker -> task_tcpreadmsg
+    
+    (2)         server_tcpsrv -> heartbeatSenderThread (sends heart beat to all client fd)
+                (to make long-lived connection alive)
+                
  Like a tcp/ip stack implementation, the task_tcpreadmsg readVariableRec() method
 works as an input function to read and parse incoming byte stream from tcp level to get type, length, data of records
  
