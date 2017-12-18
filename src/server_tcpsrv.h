@@ -83,7 +83,6 @@ class TcpServer : public Server
         sockaddr_in serveraddr;
         void sendHeartbeatToClient();
         std::unordered_set<int> clientfds;
-
         boost::mutex clientfds_mutex;
 
     public:
