@@ -4,7 +4,8 @@ TLVServer is a tcp server that receive multiple clients connection
 
 ## Design Consideration
 The architecture of TLVServer is based on Boost thread library to 
-create thread pool and using epoll to accept clients connections.
+create thread pool and using epoll to accept clients connection.
+1. 
 
 2. Library dependency Linux:
        libpthread
@@ -12,9 +13,9 @@ create thread pool and using epoll to accept clients connections.
        libboost(for multithread)
        epoll
 
-So the diagram is:
+So the TLVServer diagram is:
 
- TLVServer(main) -> Server(mutilthreaded) -> ReadTask 
+ main -> server_tcpsrv -> threadpool -> threadworker -> task_tcpreadmsg 
 
 
 

@@ -1,7 +1,7 @@
 GCC=g++ -std=c++11
 APP=TLV
 OUTFILE=$(APP)_server
-SRC = $(wildcard src/*.cc)
+SRC = $(wildcard src/*.cpp)
 OBJS = $(SRC:%.cc=%.o)
 
 BOOST_LIB_DIR=/usr/lib64
