@@ -84,6 +84,11 @@ void TcpServer::sendHeartbeatToClient()
 	echo("[server] finish sending heartbeat to all clients\n");
 }
 
+void TcpServer::sendHeartbeatThreadKickstart() {
+	boost::thread heartbeatSenderThread(&TcpServer::sendHeartbeatToClient, this);
+	heartbeatSenderThread.detach();
+}
+
 void TcpServer::Run()
 {
     int optval = 1;
@@ -145,13 +150,14 @@ void TcpServer::Run()
             }
         }
 
-        // TODO to be improved by using another thread to send the heartbeat in time-interval
+        // TODO to be improved by using libevent timer to kickstart the heartbeat sender thread
         auto finish = std::chrono::high_resolution_clock::now();
         std::chrono::duration<double> elapsed = finish - start;
         auto elapsed_seconds = std::chrono::duration_cast<std::chrono::seconds>(finish - start);
         if (elapsed_seconds.count() > 15 ){
             // every 15 seconds, send out heartbeat to all alive client
-        	sendHeartbeatToClient();
+        	//sendHeartbeatToClient();
+        	sendHeartbeatThreadKickstart();
             echo("[TcpServer] finish send heartbeat in a loop\n");
             start = finish;
         }

@@ -86,6 +86,7 @@ class TcpServer : public Server
         void sendHeartbeatToClient();
         std::unordered_set<int> clientfds;
         boost::mutex clientfds_mutex;
+        void sendHeartbeatThreadKickstart();
 
     public:
         TcpServer(ThreadPool*);
