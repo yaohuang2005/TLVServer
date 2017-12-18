@@ -52,6 +52,7 @@ On server:
 [140737326663424] [ThreadWorker] run task
 [140737326663424] [TaskTcpReadMsg] handling 7
 [127.0.0.1:1111] [Data] [5] [0x1 0x2 0x3 0x4]
+[127.0.0.1:1111] [Goodbye] [0] []
 [140737326663424] [ThreadWorker] waiting task
 [140737337169696] [server] finish sending heartbeat to all clients
 [140737337169696] [TcpServer] finish send heartbeat in a loop
