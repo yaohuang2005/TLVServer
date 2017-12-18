@@ -36,7 +36,7 @@ Add a session level by monitoring client fd, inactivated duration, and creating 
 2. repalce epoll with libevent
 
 
-## build and test step: (on Centos-6.4 x86-64 box)
+## Build and test step: (on Centos-6.4 x86-64 box)
 
 ```
 In terminal:
