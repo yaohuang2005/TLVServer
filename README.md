@@ -9,10 +9,9 @@ create thread pool and using epoll to accept clients connection.
 1. The TLVServer diagram is:
          
     main -> server_tcpsrv -> threadpool -> threadworker -> task_tcpreadmsg
-    
             server_tcpsrv -> heartbeatSenderThread (sends heart beat to all client fd)
             (to make long-lived connection alive)
- like a tcp/ip stack implementation, the task_tcpreadmsg readVariableRec() method
+ Like a tcp/ip stack implementation, the task_tcpreadmsg readVariableRec() method
 works as an input function to read and parse incoming byte stream from tcp level to get type, length, data of records
  
 2. Library dependency Linux:
@@ -29,10 +28,10 @@ alive client fd (for test, now in every 15 seconds), and of course also set clie
 
 
 ## To be improved:
-add a session level by monitoring client fd, inactivated duration, and creating a thread task to send heartbeat to client fd based on idle duration
+Add a session level by monitoring client fd, inactivated duration, and creating a thread task to send heartbeat to client fd based on idle duration
 
-raplace Boost thread with C++11 Concurrency
-repalce epool with libevent
+1. raplace Boost thread with C++11 Concurrency
+2. repalce epoll with libevent
 
 
 ## build and test step: (on Centos-6.4 x86-64 box)
